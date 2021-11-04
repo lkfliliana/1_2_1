@@ -1,0 +1,87 @@
+#I know that I went wrong somewhere with changing the turtles color and size but I followed all of the steps so I'm not sure where? The code for some reason doesn't work on replit but it does work on trinket an it should work on vs code.
+
+#-----import statements-----
+import turtle as trtl
+import random as rand
+#-----game configuration----
+spot_colors = ["plum", "violet", "mediumpurple", "orchid", "darkviolet"]
+spot_sizes = [0.5, 1, 1.5, 2, 2.5, 3]
+
+spotColor = "thistle"
+spotShape = "circle"
+spotSize = 2
+score = 0
+font_setup = ("Arial", 20, "normal")
+
+#-----initialize turtle-----
+spot = trtl.Turtle()
+spot.shape(spotShape)
+spot.turtlesize(spotSize)
+spot.fillcolor(spotColor)
+spot.penup()
+
+score_writer = trtl.Turtle()
+score_writer.hideturtle()
+score_writer.pu()
+score_writer.goto(-180,170)
+
+font_setup = ("Arial", 20, "normal")
+timer = 30
+counter_interval = 1000   #1000 represents 1 second
+timer_up = False
+
+counter =  trtl.Turtle()
+counter.hideturtle()
+counter.pu()
+counter.goto(70,170)
+#-----game functions--------
+def spot_clicked(x,y):
+    change_position()
+    update_score()
+    global timer
+    if timer > 0:
+      score += 1
+      change_position()
+    else:
+      spot.hideturtle()
+def change_position():
+    new_xpos = rand.randint(-180,180)
+    new_ypos = rand.randint(-140,140)
+    spot.hideturtle()
+    spot.goto(new_xpos, new_ypos)
+    spot.showturtle()
+def update_score():
+  global score
+  score += 1
+  score_writer.clear()
+  score_writer.write(score, font=font_setup)
+def countdown():
+  global timer, timer_up
+  counter.clear()
+  if timer <= 0:
+    counter.write("Time's Up", font=font_setup)
+    timer_up = True
+  else:
+    counter.write("Timer: " + str(timer), font=font_setup)
+    timer -= 1
+    counter.getscreen().ontimer(countdown, counter_interval) 
+def add_color():
+  spot.fillcolor(rand.choice(spot_colors))
+  spot.hideturtle()
+  spot.stamp()
+  spot.showturtle()
+  spot.fillcolor(spotColor)
+  
+  
+def changing_size():
+  spot.turtlesize(rand.choice(spot_sizes))
+
+add_color()
+changing_size()
+
+#-----events----------------
+spot.onclick(spot_clicked)
+wn = trtl.Screen()
+wn.bgcolor("lavender")
+wn.ontimer(countdown, counter_interval) 
+wn.mainloop()
